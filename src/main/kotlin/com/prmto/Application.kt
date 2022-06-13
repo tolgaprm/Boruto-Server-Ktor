@@ -1,6 +1,6 @@
 package com.prmto
 
-import io.ktor.server.application.*
+import io.ktor.application.*
 import com.prmto.plugins.*
 
 fun main(args: Array<String>): Unit =
@@ -8,7 +8,9 @@ fun main(args: Array<String>): Unit =
 
 @Suppress("unused")
 fun Application.module() {
+    configureKoin()
     configureRouting()
     configureSerialization()
     configureMonitoring()
+    configureDefaultHeader()
 }
