@@ -4,8 +4,8 @@ import com.prmto.models.ApiResponse
 import com.prmto.models.Hero
 
 
-const val NEXT_PAGE_KEY ="nextPage"
-const val PREVIOUS_PAGE_KEY ="prevPage"
+const val NEXT_PAGE_KEY = "nextPage"
+const val PREVIOUS_PAGE_KEY = "prevPage"
 
 class HeroRepositoryImpl : HeroRepository {
 
@@ -403,8 +403,8 @@ class HeroRepositoryImpl : HeroRepository {
         return ApiResponse(
             success = true,
             message = "ok",
-            prevPage =calculatePage(page)[PREVIOUS_PAGE_KEY],
-            nextPage =calculatePage(page)[NEXT_PAGE_KEY],
+            prevPage = calculatePage(page)[PREVIOUS_PAGE_KEY],
+            nextPage = calculatePage(page)[NEXT_PAGE_KEY],
             heroes = heroes[page]!!
         )
     }
@@ -432,7 +432,28 @@ class HeroRepositoryImpl : HeroRepository {
         )
     }
 
-    override suspend fun searchHeroes(name: String): ApiResponse {
-        TODO("Not yet implemented")
+    override suspend fun searchHeroes(name: String?): ApiResponse {
+        return ApiResponse(
+            success = true,
+            message = "ok",
+            heroes = findHeroes(name)
+        )
+    }
+
+    private fun findHeroes(query: String?): List<Hero> {
+        val founded = mutableListOf<Hero>()
+
+        return if (!query.isNullOrEmpty()) {
+            heroes.forEach { t, heroes ->
+                heroes.forEach { hero ->
+                    if (hero.name.lowercase().contains(query.lowercase())) {
+                        founded.add(hero)
+                    }
+                }
+            }
+            founded
+        }else{
+            emptyList()
+        }
     }
 }
